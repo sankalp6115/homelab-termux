@@ -2,7 +2,27 @@
 set -e
 
 pkg update && pkg upgrade -y
-termux-setup-storage
+
+echo "Checking storage access..."
+
+if [ -d "$HOME/storage" ]; then
+    echo "✓ Storage already configured."
+else
+    echo "Setting up storage..."
+    termux-setup-storage
+
+    echo
+    echo "Please grant the storage permission."
+    echo "Press Enter after granting permission..."
+    read
+
+    if [ -d "$HOME/storage" ]; then
+        echo "✓ Storage configured successfully."
+    else
+        echo "✗ Storage setup failed."
+        exit 1
+    fi
+fi
 
 uname
 
